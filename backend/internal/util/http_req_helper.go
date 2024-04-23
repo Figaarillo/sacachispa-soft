@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -23,4 +24,12 @@ func GetURLParam(r *http.Request, key string) (string, error) {
 	}
 
 	return param, nil
+}
+
+func DecodeReqBody(r *http.Request, body interface{}) error {
+	if err := json.NewDecoder(r.Body).Decode(body); err != nil {
+		return exeption.ErrorInvalidBody
+	}
+
+	return nil
 }

@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/Figaarillo/sacachispa-soft/internal/entity"
 	"github.com/Figaarillo/sacachispa-soft/internal/repository"
 	"github.com/Figaarillo/sacachispa-soft/internal/usecase"
 	"github.com/Figaarillo/sacachispa-soft/internal/util"
@@ -35,7 +36,7 @@ func (h *BrandHandler) List(w http.ResponseWriter, r *http.Request) {
 func (h *BrandHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	id, err := util.GetURLParam(r, "id")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
@@ -46,4 +47,22 @@ func (h *BrandHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	util.HandleHTTPResponse(w, "Brand retrieved successfully", brand)
+}
+
+func (h *BrandHandler) Create(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+
+	var brad entity.Brand
+
+	if err := util.DecodeReqBody(r, &brad); err != nil {
+		http.Error(w, err.Error(), http.StatusConflict)
+		return
+	}
+
+	if err := h.usecase.Create(brad); err != nil {
+		http.Error(w, err.Error(), http.StatusConflict)
+		return
+	}
+
+	util.HandleHTTPResponse(w, "Brand created successfully")
 }
