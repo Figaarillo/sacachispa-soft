@@ -31,3 +31,19 @@ func (h *BrandHandler) List(w http.ResponseWriter, r *http.Request) {
 
 	util.HandleHTTPResponse(w, "Brands retrieved successfully", brands)
 }
+
+func (h *BrandHandler) GetByID(w http.ResponseWriter, r *http.Request) {
+	id, err := util.GetURLParam(r, "id")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	brand, err := h.usecase.GetByID(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	util.HandleHTTPResponse(w, "Brand retrieved successfully", brand)
+}
