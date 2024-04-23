@@ -44,8 +44,8 @@ func (b *BrandGorm) GetByName(name string) (entity.Brand, error) {
 	return brand, nil
 }
 
-func (b *BrandGorm) Create(payload entity.Brand) error {
-	if result := b.db.Create(&payload); result.Error != nil {
+func (b *BrandGorm) Create(payload *entity.Brand) error {
+	if result := b.db.Create(payload); result.Error != nil {
 		return result.Error
 	}
 
@@ -57,6 +57,10 @@ func (b *BrandGorm) Update(id entity.ID, payload entity.Brand) error {
 
 	if result := b.db.First(&brand, "id = ?", id); result.Error != nil {
 		return result.Error
+	}
+
+	if err := brand.Update(payload); err != nil {
+		return err
 	}
 
 	if result := b.db.Save(&payload); result.Error != nil {
