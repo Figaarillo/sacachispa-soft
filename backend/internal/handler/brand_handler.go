@@ -36,7 +36,7 @@ func (h *BrandHandler) List(w http.ResponseWriter, r *http.Request) {
 func (h *BrandHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	id, err := util.GetURLParam(r, "id")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -53,9 +53,8 @@ func (h *BrandHandler) Create(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var brad entity.Brand
-
 	if err := util.DecodeReqBody(r, &brad); err != nil {
-		http.Error(w, err.Error(), http.StatusConflict)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -65,4 +64,41 @@ func (h *BrandHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	util.HandleHTTPResponse(w, "Brand created successfully")
+}
+
+func (h *BrandHandler) Update(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+
+	id, err := util.GetURLParam(r, "id")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var brand entity.Brand
+	if err := util.DecodeReqBody(r, &brand); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := h.usecase.Update(id, brand); err != nil {
+		http.Error(w, err.Error(), http.StatusConflict)
+		return
+	}
+
+	util.HandleHTTPResponse(w, "Brand updated successfully")
+}
+
+func (h *BrandHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	id, err := util.GetURLParam(r, "id")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := h.usecase.Delete(id); err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+	}
+
+	util.HandleHTTPResponse(w, "Brand deleted successfully")
 }
