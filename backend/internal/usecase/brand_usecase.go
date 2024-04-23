@@ -51,3 +51,14 @@ func (uc *BrandUsecase) Update(id string, payload entity.Brand) error {
 
 	return nil
 }
+
+func (uc *BrandUsecase) Delete(id string) error {
+	idParsed, err := entity.ParseID(id)
+	if err != nil {
+		return err
+	}
+
+	uc.repository.Delete(idParsed)
+
+	return nil
+}
