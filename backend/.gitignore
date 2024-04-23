@@ -1,0 +1,17 @@
+# Notes
+.notes/
+
+# IDEs
+.vscode/
+.idea/
+
+# Dev build
+build/
+tmp/
+bin/
+
+# Test
+*.out
+
+# Environment variables
+.env
