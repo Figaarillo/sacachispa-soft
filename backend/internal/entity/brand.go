@@ -1,6 +1,10 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/Figaarillo/sacachispa-soft/internal/util"
+)
 
 type Brand struct {
 	CreatedAt   time.Time `json:"created_at"`
@@ -25,8 +29,8 @@ func NewBrand(payload Brand) (*Brand, error) {
 }
 
 func (b *Brand) Update(payload Brand) error {
-	b.Name = payload.Name
-	b.Description = payload.Description
+	util.AssignIfNotEmpty(&b.Name, payload.Name)
+	util.AssignIfNotEmpty(&b.Description, payload.Description)
 
 	if err := b.Validate(); err != nil {
 		return err
