@@ -49,12 +49,12 @@ func TestBrand(t *testing.T) {
 	})
 
 	t.Run("Test Update() with invalid fields", func(t *testing.T) {
-		brand, err := entity.NewBrand(entity.Brand{Name: "", Description: ""})
+		brand, err := entity.NewBrand(entity.Brand{Name: "brand", Description: "brand description"})
 		if err != nil {
 			t.Fatalf("Failed to create brand: %v", err)
 		}
 
-		if err := brand.Update(""); err == nil {
+		if err := brand.Update(entity.Brand{Name: "", Description: ""}); err == nil {
 			t.Error("Expected error for empty name, got nil")
 		}
 	})
