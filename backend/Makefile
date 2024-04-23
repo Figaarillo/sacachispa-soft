@@ -6,3 +6,6 @@ docker.up:
 
 docker.down:
 	docker-compose down
+
+test.unit.brand:
+	go test -v ./internal/entity/brand_test.go
