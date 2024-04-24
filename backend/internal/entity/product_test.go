@@ -7,24 +7,24 @@ import (
 )
 
 func TestProduct(t *testing.T) {
-	testName := "product"
-	testDescription := "product description"
-	testPrice := 10.0
-	testStock := 5
+	tName := "product"
+	tDesc := "product description"
+	tPrice := 10.0
+	tStock := 5
 
-	testUpdatedName := "updated product"
-	testUpdatedDescription := "updated product description"
-	testUpdatedPrice := 20.0
-	testUpdatedStock := 10
+	tNewName := "updated product"
+	tNewDesc := "updated product description"
+	tNewPrice := 20.0
+	tNewStock := 10
 
 	t.Run("Test NewProduct() with valid fields", func(t *testing.T) {
 		brand, _ := entity.NewBrand(entity.Brand{Name: "brand", Description: "brand description"})
 
 		product, err := entity.NewProduct(entity.Product{
-			Name:        testName,
-			Description: testDescription,
-			Price:       testPrice,
-			Stock:       testStock,
+			Name:        tName,
+			Description: tDesc,
+			Price:       tPrice,
+			Stock:       tStock,
 			BrandID:     brand.ID,
 		})
 		if err != nil {
@@ -35,20 +35,20 @@ func TestProduct(t *testing.T) {
 			t.Fatal("Failed to create product: product is nil")
 		}
 
-		if product.Name != testName {
-			t.Errorf("Expected product name '%s', got %s", testName, product.Name)
+		if product.Name != tName {
+			t.Errorf("Expected product name '%s', got %s", tName, product.Name)
 		}
 
-		if product.Description != testDescription {
-			t.Errorf("Expected product description '%s', got %s", testDescription, product.Description)
+		if product.Description != tDesc {
+			t.Errorf("Expected product description '%s', got %s", tDesc, product.Description)
 		}
 
-		if product.Price != testPrice {
-			t.Errorf("Expected product price '%f', got %f", testPrice, product.Price)
+		if product.Price != tPrice {
+			t.Errorf("Expected product price '%f', got %f", tPrice, product.Price)
 		}
 
-		if product.Stock != testStock {
-			t.Errorf("Expected product stock '%d', got %d", testStock, product.Stock)
+		if product.Stock != tStock {
+			t.Errorf("Expected product stock '%d', got %d", tStock, product.Stock)
 		}
 
 		if product.BrandID != brand.ID {
@@ -77,37 +77,37 @@ func TestProduct(t *testing.T) {
 		brand, _ := entity.NewBrand(entity.Brand{Name: "brand", Description: "brand Description"})
 
 		product, _ := entity.NewProduct(entity.Product{
-			Name:        testName,
-			Description: testDescription,
-			Price:       testPrice,
-			Stock:       testStock,
+			Name:        tName,
+			Description: tDesc,
+			Price:       tPrice,
+			Stock:       tStock,
 			BrandID:     brand.ID,
 		})
 
 		err := product.Update(entity.Product{
-			Name:        testUpdatedName,
-			Description: testUpdatedDescription,
-			Price:       testUpdatedPrice,
-			Stock:       testUpdatedStock,
+			Name:        tNewName,
+			Description: tNewDesc,
+			Price:       tNewPrice,
+			Stock:       tNewStock,
 		})
 		if err != nil {
 			t.Fatalf("Failed to update product: %v", err)
 		}
 
-		if product.Name != testUpdatedName {
-			t.Errorf("Expected product name '%s', got %s", testUpdatedName, product.Name)
+		if product.Name != tNewName {
+			t.Errorf("Expected product name '%s', got %s", tNewName, product.Name)
 		}
 
-		if product.Description != testUpdatedDescription {
-			t.Errorf("Expected product description '%s', got %s", testUpdatedDescription, product.Description)
+		if product.Description != tNewDesc {
+			t.Errorf("Expected product description '%s', got %s", tNewDesc, product.Description)
 		}
 
-		if product.Price != testUpdatedPrice {
-			t.Errorf("Expected product price '%f', got %f", testUpdatedPrice, product.Price)
+		if product.Price != tNewPrice {
+			t.Errorf("Expected product price '%f', got %f", tNewPrice, product.Price)
 		}
 
-		if product.Stock != testUpdatedStock {
-			t.Errorf("Expected product stock '%d', got %d", testUpdatedStock, product.Stock)
+		if product.Stock != tNewStock {
+			t.Errorf("Expected product stock '%d', got %d", tNewStock, product.Stock)
 		}
 	})
 }
