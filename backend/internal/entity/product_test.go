@@ -62,7 +62,7 @@ func TestProduct(t *testing.T) {
 			Description: "",
 			Price:       0,
 			Stock:       0,
-			BrandID:     "",
+			BrandID:     entity.NewID(),
 		})
 		if err == nil {
 			t.Error("Expected error for empty name, got nil")
