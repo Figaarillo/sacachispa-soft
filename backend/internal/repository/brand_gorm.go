@@ -63,7 +63,7 @@ func (b *BrandGorm) Update(id entity.ID, payload entity.Brand) error {
 		return err
 	}
 
-	if result := b.db.Save(&payload); result.Error != nil {
+	if result := b.db.Save(&brand); result.Error != nil {
 		return result.Error
 	}
 
