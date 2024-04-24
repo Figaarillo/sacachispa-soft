@@ -9,3 +9,6 @@ docker.down:
 
 test.unit.brand:
 	go test -v ./internal/entity/brand_test.go
+
+test.unit.product:
+	go test -v ./internal/entity/product_test.go
