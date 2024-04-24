@@ -28,7 +28,7 @@ func TestProduct(t *testing.T) {
 			BrandID:     brand.ID,
 		})
 		if err != nil {
-			t.Fatalf("Failed to create product: %v", err)
+			t.Fatalf("Failed to create product, got error: %v", err)
 		}
 
 		if product == nil {
@@ -36,23 +36,23 @@ func TestProduct(t *testing.T) {
 		}
 
 		if product.Name != tName {
-			t.Errorf("Expected product name '%s', got %s", tName, product.Name)
+			t.Errorf("Expected product name '%s', but got %s", tName, product.Name)
 		}
 
 		if product.Description != tDesc {
-			t.Errorf("Expected product description '%s', got %s", tDesc, product.Description)
+			t.Errorf("Expected product description '%s', but got %s", tDesc, product.Description)
 		}
 
 		if product.Price != tPrice {
-			t.Errorf("Expected product price '%f', got %f", tPrice, product.Price)
+			t.Errorf("Expected product price '%f', but got %f", tPrice, product.Price)
 		}
 
 		if product.Stock != tStock {
-			t.Errorf("Expected product stock '%d', got %d", tStock, product.Stock)
+			t.Errorf("Expected product stock '%d', but got %d", tStock, product.Stock)
 		}
 
 		if product.BrandID != brand.ID {
-			t.Errorf("Expected product brand ID '%s', got %s", brand.ID, product.BrandID)
+			t.Errorf("Expected product brand ID '%s', but got %s", brand.ID, product.BrandID)
 		}
 	})
 
@@ -65,11 +65,11 @@ func TestProduct(t *testing.T) {
 			BrandID:     entity.NewID(),
 		})
 		if err == nil {
-			t.Error("Expected error for empty name, got nil")
+			t.Error("Expected error for empty fields, but got nil")
 		}
 
 		if err != entity.ErrMissingField {
-			t.Errorf("Expected error %v, got %v", entity.ErrMissingField, err)
+			t.Errorf("Expected error %v, but got %v", entity.ErrMissingField, err)
 		}
 	})
 
@@ -91,23 +91,23 @@ func TestProduct(t *testing.T) {
 			Stock:       tNewStock,
 		})
 		if err != nil {
-			t.Fatalf("Failed to update product: %v", err)
+			t.Fatalf("Failed to update product, got error: %v", err)
 		}
 
 		if product.Name != tNewName {
-			t.Errorf("Expected product name '%s', got %s", tNewName, product.Name)
+			t.Errorf("Expected product name '%s', but got %s", tNewName, product.Name)
 		}
 
 		if product.Description != tNewDesc {
-			t.Errorf("Expected product description '%s', got %s", tNewDesc, product.Description)
+			t.Errorf("Expected product description '%s', but got %s", tNewDesc, product.Description)
 		}
 
 		if product.Price != tNewPrice {
-			t.Errorf("Expected product price '%f', got %f", tNewPrice, product.Price)
+			t.Errorf("Expected product price '%f', but got %f", tNewPrice, product.Price)
 		}
 
 		if product.Stock != tNewStock {
-			t.Errorf("Expected product stock '%d', got %d", tNewStock, product.Stock)
+			t.Errorf("Expected product stock '%d', but got %d", tNewStock, product.Stock)
 		}
 	})
 }
