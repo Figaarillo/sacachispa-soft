@@ -7,8 +7,13 @@ import (
 )
 
 func TestBrand(t *testing.T) {
+	tName := "brand"
+	tDesc := "brand description"
+	tNewName := "brand 2"
+	tNewDesc := "brand description 2"
+
 	t.Run("Test NewBrand() with valid fields", func(t *testing.T) {
-		brand, err := entity.NewBrand(entity.Brand{Name: "brand", Description: "brand description"})
+		brand, err := entity.NewBrand(entity.Brand{Name: tName, Description: tDesc})
 		if err != nil {
 			t.Fatalf("Failed to create brand: %v", err)
 		}
@@ -18,11 +23,11 @@ func TestBrand(t *testing.T) {
 		}
 
 		if brand.Name != "brand" {
-			t.Errorf("Expected brand name 'brand', got %s", brand.Name)
+			t.Errorf("Expected brand name '%s', got '%s'", tName, brand.Name)
 		}
 
 		if brand.Description != "brand description" {
-			t.Errorf("Expected brand description 'brand description', got %s", brand.Description)
+			t.Errorf("Expected brand description '%s', got %s", tDesc, brand.Description)
 		}
 	})
 
@@ -31,23 +36,24 @@ func TestBrand(t *testing.T) {
 		if err == nil {
 			t.Error("Expected error for empty name, got nil")
 		}
+
+		if err != entity.ErrMissingField {
+			t.Errorf("Expected error '%v', got '%v'", entity.ErrMissingField, err)
+		}
 	})
 
 	t.Run("Test Update() with valid fields", func(t *testing.T) {
-		brand, err := entity.NewBrand(entity.Brand{Name: "brand", Description: "brand description"})
+		brand, err := entity.NewBrand(entity.Brand{Name: tName, Description: tDesc})
 		if err != nil {
 			t.Fatalf("Failed to create brand: %v", err)
 		}
 
-		newName := "brand 2"
-		newDescription := "brand description 2"
-
-		if err := brand.Update(entity.Brand{Name: newName, Description: newDescription}); err != nil {
+		if err := brand.Update(entity.Brand{Name: tNewName, Description: tNewDesc}); err != nil {
 			t.Errorf("Failed to update brand: %v", err)
 		}
 
-		if brand.Name != newName {
-			t.Errorf("Expected brand name '%s', got '%s'", newName, brand.Name)
+		if brand.Name != tNewName {
+			t.Errorf("Expected brand name '%s', got '%s'", tNewName, brand.Name)
 		}
 	})
 }
