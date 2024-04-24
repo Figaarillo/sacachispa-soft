@@ -22,6 +22,7 @@ func main() {
 	router := config.InitRouter()
 
 	setup.NewBrand(router, db)
+	setup.NewProduct(router, db)
 
 	log.Printf("Server is running!🔥 Go to http://%s:%d/\n", HOST, PORT)
 	http.ListenAndServe(fmt.Sprintf("%s:%d", HOST, PORT), router)
