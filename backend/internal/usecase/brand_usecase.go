@@ -31,12 +31,12 @@ func (uc *BrandUsecase) GetByName(name string) (entity.Brand, error) {
 }
 
 func (uc *BrandUsecase) Create(payload entity.Brand) error {
-	category, err := entity.NewBrand(payload)
+	brand, err := entity.NewBrand(payload)
 	if err != nil {
 		return err
 	}
 
-	uc.repository.Create(category)
+	uc.repository.Create(brand)
 
 	return nil
 }
