@@ -44,7 +44,6 @@ func (p *Product) Update(payload Product) error {
 	util.AssignIfNotEmpty(&p.Description, payload.Description)
 	util.AssignIfNotZero(&p.Stock, payload.Stock)
 	util.AssignIfNotZeroFloat(&p.Price, payload.Price)
-	util.AssignUUIDIFNotEmpty(&p.BrandID, payload.BrandID)
 	p.UpdatedAt = time.Now()
 
 	if err := p.Validate(); err != nil {

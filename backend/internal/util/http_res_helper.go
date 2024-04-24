@@ -10,11 +10,13 @@ type Response struct {
 	Msg  string      `json:"message"`
 }
 
-func HandleHTTPResponse(w http.ResponseWriter, msg string, body ...interface{}) {
+func HandleHTTPResponse(w http.ResponseWriter, msg string, code int, body ...interface{}) {
 	var res Response
 
 	res.Body = body
 	res.Msg = msg
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
 	json.NewEncoder(w).Encode(res)
 }

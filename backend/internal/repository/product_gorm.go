@@ -16,7 +16,7 @@ func NewProductGorm(db *gorm.DB) *ProductGorm {
 func (p *ProductGorm) List(offset, limit int) ([]entity.Product, error) {
 	var products []entity.Product
 
-	if result := p.db.Offset(offset).Limit(limit).
+	if result := p.db.Preload("Brand").Offset(offset).Limit(limit).
 		Find(&products); result.Error != nil {
 		return nil, result.Error
 	}
@@ -27,7 +27,7 @@ func (p *ProductGorm) List(offset, limit int) ([]entity.Product, error) {
 func (p *ProductGorm) GetByID(id entity.ID) (entity.Product, error) {
 	var product entity.Product
 
-	if result := p.db.First(&product, "id = ?", id); result.Error != nil {
+	if result := p.db.Preload("Brand").First(&product, "id = ?", id); result.Error != nil {
 		return entity.Product{}, result.Error
 	}
 

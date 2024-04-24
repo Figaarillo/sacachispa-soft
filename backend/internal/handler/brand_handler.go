@@ -30,7 +30,7 @@ func (h *BrandHandler) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Brands retrieved successfully", brands)
+	util.HandleHTTPResponse(w, "Brands retrieved successfully", http.StatusOK, brands)
 }
 
 func (h *BrandHandler) GetByID(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +46,7 @@ func (h *BrandHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Brand retrieved successfully", brand)
+	util.HandleHTTPResponse(w, "Brand retrieved successfully", http.StatusOK, brand)
 }
 
 func (h *BrandHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +63,7 @@ func (h *BrandHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Brand created successfully")
+	util.HandleHTTPResponse(w, "Brand created successfully", http.StatusCreated)
 }
 
 func (h *BrandHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -86,7 +86,7 @@ func (h *BrandHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Brand updated successfully")
+	util.HandleHTTPResponse(w, "Brand updated successfully", http.StatusOK)
 }
 
 func (h *BrandHandler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -100,5 +100,5 @@ func (h *BrandHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 	}
 
-	util.HandleHTTPResponse(w, "Brand deleted successfully")
+	util.HandleHTTPResponse(w, "Brand deleted successfully", http.StatusOK)
 }

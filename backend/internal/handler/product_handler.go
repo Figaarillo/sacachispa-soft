@@ -30,7 +30,7 @@ func (h *ProductHandler) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Products retrieved successfully", products)
+	util.HandleHTTPResponse(w, "Products retrieved successfully", http.StatusOK, products)
 }
 
 func (h *ProductHandler) GetByID(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +46,7 @@ func (h *ProductHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Product retrieved successfully", product)
+	util.HandleHTTPResponse(w, "Product retrieved successfully", http.StatusOK, product)
 }
 
 func (h *ProductHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +63,7 @@ func (h *ProductHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Product created successfully")
+	util.HandleHTTPResponse(w, "Product created successfully", http.StatusCreated)
 }
 
 func (h *ProductHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -86,7 +86,7 @@ func (h *ProductHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Product updated successfully")
+	util.HandleHTTPResponse(w, "Product updated successfully", http.StatusOK)
 }
 
 func (h *ProductHandler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -100,5 +100,5 @@ func (h *ProductHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 	}
 
-	util.HandleHTTPResponse(w, "Product deleted successfully")
+	util.HandleHTTPResponse(w, "Product deleted successfully", http.StatusOK)
 }
