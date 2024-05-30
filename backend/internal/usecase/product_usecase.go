@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"github.com/Figaarillo/sacachispa-soft/internal/entity"
+	"github.com/Figaarillo/sacachispa-soft/internal/exeption"
 	"github.com/Figaarillo/sacachispa-soft/internal/repository"
 )
 
@@ -14,6 +15,10 @@ func NewProductUsecase(repository repository.ProductRepository) *ProductUsecase 
 }
 
 func (uc *ProductUsecase) List(offset, limit int) ([]entity.Product, error) {
+	if offset < 0 || limit < 0 || (offset == 0 && limit == 0) {
+		return nil, exeption.ErrInvalidPagination
+	}
+
 	return uc.repository.List(offset, limit)
 }
 
@@ -32,7 +37,9 @@ func (uc *ProductUsecase) Create(payload entity.Product) error {
 		return err
 	}
 
-	uc.repository.Create(product)
+	if err := uc.repository.Create(product); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -43,7 +50,9 @@ func (uc *ProductUsecase) Update(id string, payload entity.Product) error {
 		return err
 	}
 
-	uc.repository.Update(idParsed, payload)
+	if err := uc.repository.Update(idParsed, payload); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -54,7 +63,9 @@ func (uc *ProductUsecase) Delete(id string) error {
 		return err
 	}
 
-	uc.repository.Delete(idParsed)
+	if err := uc.repository.Delete(idParsed); err != nil {
+		return err
+	}
 
 	return nil
 }
