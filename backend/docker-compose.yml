@@ -1,7 +1,6 @@
 services:
   ### DATABASE ###
   database:
-    container_name: database
     image: postgres:16.2-alpine3.19
     restart: always
     environment:
@@ -17,7 +16,6 @@ services:
 
   ### TEST DATABASE ###
   database-test:
-    container_name: database-test
     image: postgres:16.2-alpine3.19
     restart: always
     environment:
@@ -27,13 +25,12 @@ services:
     volumes:
       - pgdata-test:/var/lib/postgresql/data
     ports:
-      - "${TEST_POSTGRES_PORT}:5432"
+      - "${TEST_DATABASE_PORT}:5432"
     networks:
       - sacachispa-net
 
   ### API SERVER ###
   apiserver:
-    container_name: apiserver
     build:
       context: .
       dockerfile: Dockerfile
@@ -42,6 +39,10 @@ services:
       - database
     ports:
       - "${SERVER_PORT}:8080"
+    environment:
+      DATABASE_HOST: database
+    networks:
+      - sacachispa-net
 
 volumes:
   pgdata:
