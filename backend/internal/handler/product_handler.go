@@ -26,7 +26,7 @@ func (h *ProductHandler) List(w http.ResponseWriter, r *http.Request) {
 
 	products, err := h.usecase.List(offset, limit)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		util.HandleHTTPError(w, err, http.StatusNotFound)
 		return
 	}
 
@@ -36,13 +36,13 @@ func (h *ProductHandler) List(w http.ResponseWriter, r *http.Request) {
 func (h *ProductHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	id, err := util.GetURLParam(r, "id")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	product, err := h.usecase.GetByID(id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		util.HandleHTTPError(w, err, http.StatusNotFound)
 		return
 	}
 
@@ -54,16 +54,16 @@ func (h *ProductHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	var product entity.Product
 	if err := util.DecodeReqBody(r, &product); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	if err := h.usecase.Create(product); err != nil {
-		http.Error(w, err.Error(), http.StatusConflict)
+		util.HandleHTTPError(w, err, http.StatusConflict)
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Product created successfully", http.StatusCreated)
+	util.HandleHTTPResponse(w, "Product created successfully", http.StatusCreated, nil)
 }
 
 func (h *ProductHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -71,34 +71,35 @@ func (h *ProductHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	id, err := util.GetURLParam(r, "id")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	var product entity.Product
 	if err := util.DecodeReqBody(r, &product); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	if err := h.usecase.Update(id, product); err != nil {
-		http.Error(w, err.Error(), http.StatusConflict)
+		util.HandleHTTPError(w, err, http.StatusConflict)
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Product updated successfully", http.StatusOK)
+	util.HandleHTTPResponse(w, "Product updated successfully", http.StatusOK, nil)
 }
 
 func (h *ProductHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	id, err := util.GetURLParam(r, "id")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	if err := h.usecase.Delete(id); err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		util.HandleHTTPError(w, err, http.StatusNotFound)
+		return
 	}
 
-	util.HandleHTTPResponse(w, "Product deleted successfully", http.StatusOK)
+	util.HandleHTTPResponse(w, "Product deleted successfully", http.StatusOK, nil)
 }

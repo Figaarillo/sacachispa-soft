@@ -26,7 +26,7 @@ func (h *BrandHandler) List(w http.ResponseWriter, r *http.Request) {
 
 	brands, err := h.usecase.List(offset, limit)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		util.HandleHTTPError(w, err, http.StatusNotFound)
 		return
 	}
 
@@ -36,13 +36,13 @@ func (h *BrandHandler) List(w http.ResponseWriter, r *http.Request) {
 func (h *BrandHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	id, err := util.GetURLParam(r, "id")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	brand, err := h.usecase.GetByID(id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		util.HandleHTTPError(w, err, http.StatusNotFound)
 		return
 	}
 
@@ -54,16 +54,16 @@ func (h *BrandHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	var brad entity.Brand
 	if err := util.DecodeReqBody(r, &brad); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	if err := h.usecase.Create(brad); err != nil {
-		http.Error(w, err.Error(), http.StatusConflict)
+		util.HandleHTTPError(w, err, http.StatusConflict)
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Brand created successfully", http.StatusCreated)
+	util.HandleHTTPResponse(w, "Brand created successfully", http.StatusCreated, nil)
 }
 
 func (h *BrandHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -71,34 +71,35 @@ func (h *BrandHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	id, err := util.GetURLParam(r, "id")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	var brand entity.Brand
 	if err := util.DecodeReqBody(r, &brand); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	if err := h.usecase.Update(id, brand); err != nil {
-		http.Error(w, err.Error(), http.StatusConflict)
+		util.HandleHTTPError(w, err, http.StatusConflict)
 		return
 	}
 
-	util.HandleHTTPResponse(w, "Brand updated successfully", http.StatusOK)
+	util.HandleHTTPResponse(w, "Brand updated successfully", http.StatusOK, nil)
 }
 
 func (h *BrandHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	id, err := util.GetURLParam(r, "id")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.HandleHTTPError(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	if err := h.usecase.Delete(id); err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		util.HandleHTTPError(w, err, http.StatusNotFound)
+		return
 	}
 
-	util.HandleHTTPResponse(w, "Brand deleted successfully", http.StatusOK)
+	util.HandleHTTPResponse(w, "Brand deleted successfully", http.StatusOK, nil)
 }
