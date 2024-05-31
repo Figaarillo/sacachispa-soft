@@ -12,35 +12,39 @@ import (
 )
 
 type EnvVars struct {
-	HOST                       string        `validate:"required,hostname"`
-	POSTGRES_HOST              string        `validate:"required,hostname"`
-	POSTGRES_USER              string        `validate:"required"`
-	POSTGRES_PASSWORD          string        `validate:"required"`
-	POSTGRES_DATABASE          string        `validate:"required"`
-	PORT                       uint          `validate:"required,gte=1,lte=65535"`
-	POSTGRES_PORT              uint          `validate:"required,gte=1,lte=65535"`
-	POSTGRES_MAX_CONNS         int           `validate:"required,gte=1"`
-	POSTGRES_MAX_IDLE_CONNS    int           `validate:"required,gte=1"`
-	POSTGRES_MAX_CONN_LIFETIME time.Duration `validate:"required"`
+	DATABASE_HOST              string        `validate:"required"`
+	DATABASE_USER              string        `validate:"required"`
+	DATABASE_PASS              string        `validate:"required"`
+	DATABASE_NAME              string        `validate:"required"`
+	JWT_SECRET_KEY             string        `validate:"required"`
+	SERVER_PORT                int           `validate:"required,gte=1,lte=65535"`
+	SERVER_READ_TIMEOUT        int           `validate:"required,gte=1"`
+	DATABASE_PORT              int           `validate:"required,gte=1,lte=65535"`
+	DATABASE_MAX_CONNS         int           `validate:"required,gte=1"`
+	DATABASE_MAX_IDLE_CONNS    int           `validate:"required,gte=1"`
+	DATABASE_MAX_CONN_LIFETIME time.Duration `validate:"required"`
+	JWT_EXPIRES_IN             int           `validate:"required,gte=1"`
 }
 
-func NewEnvConf(envFile string) (*EnvVars, error) {
-	err := godotenv.Load(envFile)
+func NewEnvConf() (*EnvVars, error) {
+	err := godotenv.Load()
 	if err != nil {
-		return &EnvVars{}, fmt.Errorf("error cargando el archivo .env: %w", err)
+		return &EnvVars{}, fmt.Errorf("error loading .env: %w", err)
 	}
 
 	env := &EnvVars{
-		HOST:                       os.Getenv("HOST"),
-		PORT:                       uint(atoi(os.Getenv("PORT"))),
-		POSTGRES_HOST:              os.Getenv("POSTGRES_HOST"),
-		POSTGRES_PORT:              uint(atoi(os.Getenv("POSTGRES_PORT"))),
-		POSTGRES_USER:              os.Getenv("POSTGRES_USER"),
-		POSTGRES_PASSWORD:          os.Getenv("POSTGRES_PASSWORD"),
-		POSTGRES_DATABASE:          os.Getenv("POSTGRES_DATABASE"),
-		POSTGRES_MAX_CONNS:         atoi(os.Getenv("POSTGRES_MAX_CONNS")),
-		POSTGRES_MAX_IDLE_CONNS:    atoi(os.Getenv("POSTGRES_MAX_IDLE_CONNS")),
-		POSTGRES_MAX_CONN_LIFETIME: time.Duration(atoi(os.Getenv("POSTGRES_MAX_CONN_LIFETIME"))) * time.Second,
+		SERVER_PORT:                atoi(os.Getenv("SERVER_PORT")),
+		SERVER_READ_TIMEOUT:        atoi(os.Getenv("SERVER_READ_TIMEOUT")),
+		DATABASE_HOST:              os.Getenv("DATABASE_HOST"),
+		DATABASE_PORT:              atoi(os.Getenv("DATABASE_PORT")),
+		DATABASE_USER:              os.Getenv("DATABASE_USER"),
+		DATABASE_PASS:              os.Getenv("DATABASE_PASS"),
+		DATABASE_NAME:              os.Getenv("DATABASE_NAME"),
+		DATABASE_MAX_CONNS:         atoi(os.Getenv("DATABASE_MAX_CONNS")),
+		DATABASE_MAX_IDLE_CONNS:    atoi(os.Getenv("DATABASE_MAX_IDLE_CONNS")),
+		DATABASE_MAX_CONN_LIFETIME: time.Duration(atoi(os.Getenv("DATABASE_MAX_CONN_LIFETIME"))),
+		JWT_SECRET_KEY:             os.Getenv("JWT_SECRET_KEY"),
+		JWT_EXPIRES_IN:             atoi(os.Getenv("JWT_EXPIRES_IN")),
 	}
 
 	err = validateEnvVars(env)
@@ -55,8 +59,8 @@ func validateEnvVars(env *EnvVars) error {
 	validate := validator.New()
 	if err := validate.Struct(env); err != nil {
 		for _, err := range err.(validator.ValidationErrors) {
-			field, _ := reflect.TypeOf(*env).FieldByName(err.StructField()) // Cambio aquí
-			return fmt.Errorf("error en el campo: %s, condición: %s", field.Name, err.Tag())
+			field, _ := reflect.TypeOf(*env).FieldByName(err.StructField())
+			return fmt.Errorf("cannot bind file: %s, error: %s", field.Name, err.Tag())
 		}
 	}
 	return nil

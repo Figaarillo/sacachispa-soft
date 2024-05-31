@@ -10,13 +10,12 @@ import (
 )
 
 func main() {
-	env, err := config.NewEnvConf(".env")
+	env, err := config.NewEnvConf()
 	if err != nil {
-		panic(err)
+		log.Fatalf("could not load config file: %v", err)
 	}
 
-	PORT := env.PORT
-	HOST := env.HOST
+	PORT := env.SERVER_PORT
 
 	db := config.InitGorm(env)
 	router := config.InitRouter()
@@ -24,6 +23,6 @@ func main() {
 	setup.NewBrand(router, db)
 	setup.NewProduct(router, db)
 
-	log.Printf("Server is running!🔥 Go to http://%s:%d/\n", HOST, PORT)
-	http.ListenAndServe(fmt.Sprintf("%s:%d", HOST, PORT), router)
+	log.Printf("Server is running!🔥 Go to http://localhost:%d/\n", PORT)
+	http.ListenAndServe(fmt.Sprintf(":%d", PORT), router)
 }
